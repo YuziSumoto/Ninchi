@@ -1,0 +1,175 @@
+<html>
+<head>
+  <style type="text/css">
+    .text  {font-size:XX-LARGE}
+    .button  {font-size:X-LARGE;WIDTH: 200px; HEIGHT:40px}
+		.scr {
+			overflow-y: scroll;   /* スクロール表示 */ 
+			width: 200px;
+			height: 200px;
+		}
+  </style>
+
+	<!-- カレンダー表示用 ↓-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/redmond/jquery-ui.css" >
+	<script>
+	  $(function() {
+	    $("#datepicker").datepicker();
+	  });
+	</script>
+	<!-- カレンダー表示用 ↑-->
+
+	<title>Ninchi020</title>
+</head>
+
+<body>
+	<form name="Main" action="/Ninchi020/" method="post" style="font-size:X-LARGE">
+
+<table border="1">
+
+  <TR style="background-color:lightgray">
+    <TH>
+      日時
+    </TH>
+    <TH align="left">
+			{{  Rec.TxtHizuke }} 
+      <input value="{{ Rec.TxtZikoku_S }}" name="TxtZikoku_S" style="width:80px"/>
+      ～
+      <input value="{{ Rec.TxtZikoku_E }}" name="TxtZikoku_E" style="width:80px"/>
+    </TH>
+    <TH align="left">担当者</TH>
+    <TH align="left">
+      <input value="{{ Rec.TxtTanto }}" name="TxtTanto" style="width:200px"/>
+    </TH>
+  </TR>
+
+  <TR style="background-color:lightgray">
+    <TH>相談方法</TH>
+    <TH align="left">
+      <input type="radio" name="OptHouhou" value="1" {{ Rec.OptHouhou1 }} >電話
+      <input type="radio" name="OptHouhou" value="2" {{ Rec.OptHouhou2 }} >受診
+      <input type="radio" name="OptHouhou" value="3" {{ Rec.OptHouhou3 }} >その他<BR>
+      <input value="{{ Rec.TxtHouhou }}" name="TxtHouhou" style="width:200px"/>
+    </TH>
+    <TH>住居状況</TH>
+    <TH align="left">
+      <input type="radio" name="OptZyukyo" value="1" {{ Rec.OptZyukyo1 }} >自宅
+      <input type="radio" name="OptZyukyo" value="2" {{ Rec.OptZyukyo2 }} >入所／入院
+      <input type="radio" name="OptZyukyo" value="3" {{ Rec.OptZyukyo3 }} >その他<BR>
+      <input value="{{ Rec.TxtZyukyo }}" name="TxtZyukyo" style="width:200px"/>
+    </TH>
+  </TR>
+
+
+  <TR style="background-color:lightgray">
+    <TH rowspan="2">対象者</TH>
+    <TH align="left">氏名
+      <input value="{{ Rec.TxtName }}" name="TxtName" style="width:250px"/>
+    </TH>
+    <TH>性別</TH>
+    <TH align="left">
+      <input type="radio" name="OptSex" value="1" {{ Rec.OptSex1 }} >男
+      <input type="radio" name="OptSex" value="2" {{ Rec.OptSex2 }} >女
+    </TH>
+  </TR>
+
+  <TR style="background-color:lightgray">
+    <TH align="left">住所
+      <input value="{{ Rec.TxtZyusyo }}" name="TxtZyusyo"style="width:250px"/>
+    </TH>
+    <TH>生年月日</TH>
+    <TH align="left">
+      <input value="{{ Rec.TxtBirthDay }}" name="TxtBirthDay" style="width:200px"/>
+      <a href="http://seireki.hikak.com/" target="_blank">西暦和歴一覧</a>
+    </TH>
+  </TR>
+
+  <TR style="background-color:lightgray">
+    <TH rowspan="2">相談者</TH>
+    <TH align="left" colspan="4">氏名
+      <input value="{{ Rec.TxtSoudanName }}" name="TxtSoudanName" style="width:200px"/>
+    </TH>
+  </TR>
+
+  <TR style="background-color:lightgray">
+    <TH align="left" colspan="4">
+      <input type="radio" name="OptZokugara" value="1" {{ Rec.OptZokugara1 }} >本人
+      <input type="radio" name="OptZokugara" value="2" {{ Rec.OptZokugara2 }} >家族
+      <input type="radio" name="OptZokugara" value="6" {{ Rec.OptZokugara6 }} >病院
+      <input type="radio" name="OptZokugara" value="7" {{ Rec.OptZokugara7 }} >診療所
+      <input type="radio" name="OptZokugara" value="8" {{ Rec.OptZokugara8 }} >居宅
+      <input type="radio" name="OptZokugara" value="9" {{ Rec.OptZokugara9 }} >包括
+      <input type="radio" name="OptZokugara" value="3" {{ Rec.OptZokugara3 }} >友人
+      <input type="radio" name="OptZokugara" value="4" {{ Rec.OptZokugara4 }} >その他<BR>
+      <input value="{{ Rec.TxtZokugara }}" name="TxtZokugara" style="width:200px"/>
+    </TH>
+  </TR>
+
+  <TR>
+    <TH valign="top" style="background-color:lightgray">
+      相談内容
+    </TH>
+    <TD valign="top" colspan="4">
+      <textarea name="TxtNaiyo" cols=100 rows=20>{{Rec.TxtNaiyo}}</textarea>
+    </TD>
+  </TR>
+
+  <TR style="background-color:lightgray">
+    <TH>対応</TH>
+    <TD align="left" colspan="4">
+      <input type="checkbox" name="ChkTaiou1" {{ Rec.ChkTaiou1 }} >電話相談のみ
+      <input type="checkbox" name="ChkTaiou2" {{ Rec.ChkTaiou2 }} >受診
+      <input type="checkbox" name="ChkTaiou3" {{ Rec.ChkTaiou3 }} >入院
+      <input type="checkbox" name="ChkTaiou4" {{ Rec.ChkTaiou4 }} >その他<BR>
+      <textarea name="TxtTaiou" cols=100 rows=14>{{Rec.TxtTaiou}}</textarea>
+    </TD>
+  </TR>
+
+  <TR style="background-color:lightgray">
+    <TH>受診希望日</TH>
+    <TD align="left" colspan="4">
+      <input value="{{ Rec.TxtZyusinKibou1 }}" name="TxtZyusinKibou1" style="width:100px"/>
+      <input value="{{ Rec.TxtZyusinBikou1 }}" name="TxtZyusinBikou1" style="width:200px"/><BR>
+      <input value="{{ Rec.TxtZyusinKibou2 }}" name="TxtZyusinKibou2" style="width:100px"/>
+      <input value="{{ Rec.TxtZyusinBikou2 }}" name="TxtZyusinBikou2" style="width:200px"/><BR>
+      <input value="{{ Rec.TxtZyusinKibou3 }}" name="TxtZyusinKibou3" style="width:100px"/>
+      <input value="{{ Rec.TxtZyusinBikou3 }}" name="TxtZyusinBikou3" style="width:200px"/><BR>
+    </TD>
+  </TR>
+  <TR style="background-color:lightgray">
+    <TH>連絡先</TH>
+    <TD align="left" colspan="4">
+      名前<input value="{{ Rec.TxtRenYubin }}" name="TxtRenYubin" style="width:200px"/><BR>
+      住所　　　<input value="{{ Rec.TxtRenZyusyo }}" name="TxtRenZyusyo" style="width:400px"/><BR>
+      電話番号<input value="{{ Rec.TxtRenTel }}" name="TxtRenTel" style="width:200px"/><BR>
+    </TD>
+  </TR>
+  <TR style="background-color:lightgray">
+    <TH>備考</TH>
+    <TD align="left" colspan="4">
+      <textarea name="TxtBikou" cols=100 rows=5>{{Rec.TxtBikou}}</textarea>
+    </TD>
+  </TR>
+
+</table>
+<BR>
+
+{{	LblMsg	}}
+
+<BR>
+<BR>
+
+	<input type="button" class="button"
+		value="終了" onclick="location.href='/Ninchi010/'">
+　　
+<input type="submit" value = "決定" name="BtnKettei" class="button"><BR>
+
+
+</form>
+
+</body>
+
+</html>

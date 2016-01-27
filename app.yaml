@@ -1,0 +1,36 @@
+application: ninchi-1116
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+# 保存はUTF-8指定しないとエラーになるから注意な
+
+# 日付指定画面
+- url: /Ninchi000/.*
+  script: Ninchi000.app
+
+# 日別一覧画面
+- url: /Ninchi010/.*
+  script: Ninchi010.app
+
+# データ入力画面
+- url: /Ninchi020/.*
+  script: Ninchi020.app
+
+# EXCEL出力画面
+- url: /Ninchi025/.*
+  script: Ninchi025.app
+
+# 初画面(日付指定画面)
+- url: .*
+  script: Ninchi000.app
+
+libraries:
+- name: webapp2
+  version: "2.5.2"

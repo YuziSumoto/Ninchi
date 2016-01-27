@@ -1,0 +1,50 @@
+<html>
+<head>
+  <style type="text/css">
+    .text  {font-size:XX-LARGE}
+    .button  {font-size:X-LARGE;WIDTH: 200px; HEIGHT:40px}
+  </style>
+
+	<!-- カレンダー表示用 ↓-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/redmond/jquery-ui.css" >
+	<script>
+	  $(function() {
+	    $("#datepicker").datepicker();
+	  });
+	</script>
+	<!-- カレンダー表示用 ↑-->
+
+	<title>Ninchi000</title>
+</head>
+
+<body>
+	<form name="Main" action="/Ninchi000/" style="font-size:X-LARGE">
+
+日付　<input value="{{ TxtHizuke }}" name="TxtHizuke"  id='datepicker' 
+               style="width:200px;font-size:X-LARGE"/>
+<BR>
+	<input type="submit" value = "相談記録登録" name="BtnNinchi010" class="button"><BR>
+<BR>
+<BR>
+
+	<input type="button" class="button"
+		value="統計資料">
+<!--
+		 onclick="location.href='/Ninchi050/'">
+-->
+
+<BR>
+<label style="font-size:LARGE;COLOR: red">{{ LblMsg }}</label><BR>
+
+<BR>
+<BR>
+<input type="submit" value = "終了" name="BtnLogout" class="button"><BR>
+
+</form>
+
+</body>
+
+</html>
