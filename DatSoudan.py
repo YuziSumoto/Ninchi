@@ -18,6 +18,7 @@ class DatSoudan(db.Model):
   SoudanName        = db.StringProperty(multiline=False)      # 相談者名
   Zokugara          = db.IntegerProperty()                    # 続柄
   ZokugaraBikou     = db.StringProperty(multiline=False)      # 続柄備考
+  Zyokyo            = db.StringProperty(multiline=True)       # 状況
   Naiyo             = db.StringProperty(multiline=True)       # 内容
   TaiouKubun1       = db.BooleanProperty()                    # 対応区分1
   TaiouKubun2       = db.BooleanProperty()                    # 対応区分1

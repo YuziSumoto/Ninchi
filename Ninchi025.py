@@ -64,7 +64,8 @@ class MainHandler(webapp2.RequestHandler):
     WorkSheet.write_merge(5,6,1 ,1,u"対象者",Styles["Style002"])
     WorkSheet.write_merge(7,8,1 ,1,u"相談者",Styles["Style002"])
 
-    WorkSheet.write_merge(9,23,1 ,1,u"相談内容",Styles["Style002"])
+    WorkSheet.write_merge(9,16,1 ,1,u"相談状況",Styles["Style002"])
+    WorkSheet.write_merge(17,23,1 ,1,u"相談内容",Styles["Style002"])
     WorkSheet.write_merge(24,27,1 ,1,u"対応",Styles["Style002"])
 
     WorkSheet.write_merge(28,30,1,1,u"受診希望日",Styles["Style002"])
@@ -153,10 +154,15 @@ class MainHandler(webapp2.RequestHandler):
       OutStr += "(" + Rec.ZokugaraBikou + ")"
     WorkSheet.write_merge(8,8,2 ,7,OutStr,Styles["Style003"])
 
+    # 相談状況
+    OutStr = Rec.Zyokyo  # .replace('\r\n','\n') # 改行コード対応　これないとEXCELは改行しない
+    WorkSheet.write_merge(9,16,2 ,7,OutStr,Styles["Style004"])
+
     # 相談内容
 #    OutStr = Rec.Naiyo.replace(('\r'or'\n'),'\r\n') # 改行コード対応　これないとEXCELは改行しない
     OutStr = Rec.Naiyo  # .replace('\r\n','\n') # 改行コード対応　これないとEXCELは改行しない
-    WorkSheet.write_merge(9,23,2 ,7,OutStr,Styles["Style004"])
+#    WorkSheet.write_merge(9,23,2 ,7,OutStr,Styles["Style004"])
+    WorkSheet.write_merge(17,23,2 ,7,OutStr,Styles["Style004"])
 
     # 対応
     OutStr = ""

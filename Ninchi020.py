@@ -142,6 +142,8 @@ class MainHandler(webapp2.RequestHandler):
     
     Rec["TxtName"]   = DataRec.Name
     Rec["TxtTanto"]  = DataRec.Tanto
+    if DataRec.Zyokyo != None:
+      Rec["TxtZyokyo"]  = DataRec.Zyokyo
     Rec["TxtNaiyo"]  = DataRec.Naiyo
     if  DataRec.Houhou != None:
       Rec["OptHouhou" + str(DataRec.Houhou)] = "Checked"
@@ -202,6 +204,7 @@ class MainHandler(webapp2.RequestHandler):
       Rec.Zikoku_E  = datetime.datetime.strptime(Hizuke, '%H:%M') # 時刻変換
 
     Rec.Tanto        = self.request.get('TxtTanto')
+    Rec.Zyokyo       = self.request.get('TxtZyokyo')
     Rec.Naiyo        = self.request.get('TxtNaiyo')
     Rec.Houhou       = int(self.request.get('OptHouhou'))
     Rec.HouhouBikou  = self.request.get('TxtHouhou')
