@@ -27,3 +27,10 @@ indexes:
   - name: Seq
     direction: desc
   - name: Name
+
+- kind: DatSoudan
+  properties:
+  - name: Hizuke
+    direction: desc
+  - name: Seq
+    direction: desc

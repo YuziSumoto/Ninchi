@@ -1,6 +1,8 @@
 # -*- coding: UTF-8 -*-
 from google.appengine.ext import db
 
+import datetime # 日付モジュール
+
 class DatSoudan(db.Model):
   Hizuke            = db.DateTimeProperty(auto_now_add=False) # 相談日
   Seq               = db.IntegerProperty()                    # 相談番号
@@ -36,6 +38,20 @@ class DatSoudan(db.Model):
   RenTel            = db.StringProperty(multiline=False)      # 電話番号
   Bikou             = db.StringProperty(multiline=True)       # 備考
 
+  def GetMonthList(self,Hizuke): # 指定以前１ヶ月のデータ取得
+
+    SHizuke = datetime.datetime.strptime(Hizuke, '%Y/%m/%d')
+    SHizuke -= datetime.timedelta(days=31) #31日減算
+    SHizuke = SHizuke.strftime('%Y/%m/%d')
+
+    Sql =  "SELECT * FROM DatSoudan"
+    Sql += " Where Hizuke >= DATE('" + SHizuke.replace("/","-") + "')"
+    Sql += "  And  Hizuke <= DATE('" + Hizuke.replace("/","-") + "')"
+    Sql += "    Order By Hizuke DESC,Seq DESC"
+    Snap = db.GqlQuery(Sql)
+    Rec  = Snap.fetch(Snap.count())
+    return Rec
+
   def GetDayList(self,Hizuke): # 指定日のデータ取得
 
     Sql =  "SELECT * FROM DatSoudan"
@@ -43,36 +59,37 @@ class DatSoudan(db.Model):
     Sql += "    Order By Seq"
     Snap = db.GqlQuery(Sql)
     Rec  = Snap.fetch(Snap.count())
-
     return Rec
 
   def GetLastSeq(self,Hizuke): # 指定日付最終Seq取得
 
     Sql =  "SELECT Seq FROM DatSoudan"
-    Sql += " Where Hizuke = DATE('" + Hizuke.replace("/","-") + "')"
+    Sql += " Where  Hizuke = DATE('" + Hizuke.replace("/","-") + "')"
     Sql += "    Order By Seq Desc" # 大きい順
     Snap = db.GqlQuery(Sql)
-    if  Snap.count() == 0:  # 当日データなければ 0
+    if  Snap.count() == 0:  # 該当データなければ 0
       LastSeq = 0
     else:
       LastSeq = Snap.fetch(1)[0].Seq # 最大のSeq
 
     return LastSeq
 
-  def GetRec(self,Hizuke,Seq): # 指定日,指定番号のデータ取得
-
+#  def GetRec(self,Hizuke,Seq): # 指定日,指定番号のデータ取得
+  def GetRec(self,Key): # 指定キーのデータ取得
+
     Sql =  "SELECT * FROM DatSoudan"
-    Sql += " Where Hizuke = DATE('" + Hizuke.replace("/","-") + "')"
-    Sql += "  And  Seq    = " + str(Seq)
+    Sql +=  " Where __key__ = KEY('" + str(Key) + "')"
+#    Sql += " Where Hizuke = DATE('" + Hizuke.replace("/","-") + "')"
+#    Sql += "  And  Seq    = " + str(Seq)
     Snap = db.GqlQuery(Sql)
     Rec = Snap.fetch(Snap.count())
-    return Rec[0]
 
-  def DelRec(self,Hizuke,Seq): # 指定患者,指定日,指定Seq削除
-
+    return Rec[0]
+
+  def DelRec(self,Key): # 指定患者,指定日,指定Seq削除
+
     Sql =  "SELECT * FROM DatSoudan"
-    Sql += " Where Hizuke = DATE('" + Hizuke.replace("/","-") + "')"
-    Sql += "  And  Seq    = " + Seq
+    Sql +=  " Where __key__ = KEY('" + str(Key) + "')"
     Snap = db.GqlQuery(Sql)
     for Rec in Snap:
        Rec.delete()

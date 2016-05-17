@@ -51,15 +51,12 @@ class MainHandler(webapp2.RequestHandler):
 
     LblMsg = " "
 
-    if self.request.get('BtnSelect')  != '':
-      Parm =  "?Hizuke=" + self.request.cookies.get('Hizuke', '') # Cookieより
-      Parm += "&Seq=" + self.request.get('BtnSelect', '') # Cookieより
-      self.redirect("/Ninchi020/" + Parm) #
-      return
-
     for param in self.request.arguments(): 
+      if "BtnSelect" in param:  # 更新ボタン？
+        Parm = "?Key=" + param.replace("BtnSelect","")  # Cookieより
+        self.redirect("/Ninchi020/" + Parm) #
       if "BtnDel" in param:  # 削除ボタン？
-        DatSoudan().DelRec(self.request.cookies.get('Hizuke', ''),param.replace("BtnDel",""))
+        DatSoudan().DelRec(param.replace("BtnDel",""))
 
     if self.request.get('BtnAdd')  != '':
       Parm = "?Hizuke=" + self.request.cookies.get('Hizuke', '') # Cookieより
@@ -68,7 +65,11 @@ class MainHandler(webapp2.RequestHandler):
 
     strTable  =  self.TableSet(self.request.cookies.get('Hizuke', ''))
 
+    Rec = {} # 画面受け渡し用領域
+    Rec["TxtHizuke"] = self.request.cookies.get('Hizuke', '') # Cookieより
+
     template_values = {
+      'Rec'     :Rec,
       'StrTable':strTable,
       'LblMsg': LblMsg
       }
@@ -82,7 +83,7 @@ class MainHandler(webapp2.RequestHandler):
 
     retStr = ""
 
-    Snap = DatSoudan().GetDayList(Hizuke)
+    Snap = DatSoudan().GetMonthList(Hizuke)
 
 #    for Ctr in range(1,10):
     for Rec in Snap:
@@ -90,10 +91,14 @@ class MainHandler(webapp2.RequestHandler):
       retStr += "<TR>"
 
       retStr += "<TD>"    # 更新ボタン（患者コード)
-      retStr += "<input type='submit' value = '"
-      retStr += "{0:02d}".format(Rec.Seq)
-      retStr += "' name='BtnSelect"
+      retStr += u"<input type='submit' value = '更新'"
+      retStr += " name='BtnSelect"
+      retStr += str(Rec.key())
       retStr += "' style='width:80px'>"
+      retStr += "</TD>"
+
+      retStr += "<TD>"    # 患者名
+      retStr += Rec.Hizuke.strftime('%Y/%m/%d')
       retStr += "</TD>"
 
       retStr += "<TD>"    # 患者名
@@ -104,8 +109,7 @@ class MainHandler(webapp2.RequestHandler):
       retStr += u"<input type='button' value = '印刷'"
       retStr += "onclick='window.open("
       retStr += '"/Ninchi025/'
-      retStr += "?Hizuke=" + Rec.Hizuke.strftime('%Y/%m/%d')
-      retStr += "&Seq=" + str(Rec.Seq)
+      retStr += "?Key=" + str(Rec.key())
       retStr += '"'
       retStr += ");'"
       retStr += " style='width:50px'>"
@@ -113,7 +117,7 @@ class MainHandler(webapp2.RequestHandler):
       retStr += "<TD>"    # 削除ボタン（患者コード)
       retStr += u"<input type='submit' value = '削除'"
       retStr += "' name='BtnDel" 
-      retStr += str(Rec.Seq)
+      retStr += str(Rec.key())
       retStr += "' style='width:50px'>"
       retStr += "</TD>"
 

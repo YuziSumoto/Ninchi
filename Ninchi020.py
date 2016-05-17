@@ -30,26 +30,24 @@ class MainHandler(webapp2.RequestHandler):
 
     Rec = {} # 画面受け渡し用領域
 
-    if self.request.get('Hizuke') == "": # パラメタ無し？
-      Rec["TxrHizuke"] = self.request.cookies.get('Hizuke', '') # Cookieより
-    else:
+    if self.request.get('Hizuke') != "": # パラメタ無し？
       Rec["TxtHizuke"] = self.request.get('Hizuke')   # パラメタ取得
+
+    if self.request.get('Key') == "": # パラメタ無し？
+      Key = ""
+    else:
+      Key = self.request.get('Key')   # パラメタ取得
+      self.DBGet(Key,Rec)
+
+    cookieStr = 'Hizuke=' + Rec["TxtHizuke"] + ';'     # Cookie保存
+    self.response.headers.add_header('Set-Cookie', cookieStr.encode('shift-jis'))
+    cookieStr = 'Key=' + str(Key) + ';'     # Cookie保存
+    self.response.headers.add_header('Set-Cookie', cookieStr.encode('shift-jis'))
 
     Rec["OptHouhou1"] = "Checked"  # 新規登録時ディフォルト
     Rec["OptSex1"] = "Checked"  # 新規登録時ディフォルト
     Rec["OptZyukyo1"] = "Checked"  # 新規登録時ディフォルト
     Rec["OptZokugara1"] = "Checked"  # 新規登録時ディフォルト
-
-    if self.request.get('Seq') == "": # パラメタ無し？
-      Rec["TxrSeq"] = self.request.cookies.get('Seq', '') # Cookieより
-    else:
-      Rec["TxtSeq"] = self.request.get('Seq')   # パラメタ取得
-      self.DBGet(Rec["TxtHizuke"],Rec["TxtSeq"],Rec)
-
-    cookieStr = 'Hizuke=' + self.request.get('Hizuke') + ';'     # Cookie保存
-    self.response.headers.add_header('Set-Cookie', cookieStr.encode('shift-jis'))
-    cookieStr = 'Seq=' + self.request.get('Seq') + ';'     # Cookie保存
-    self.response.headers.add_header('Set-Cookie', cookieStr.encode('shift-jis'))
 
     LblMsg = "内容を指定し、決定を押してください。"
 
@@ -130,9 +128,12 @@ class MainHandler(webapp2.RequestHandler):
     return  # Recは構造体なんで参照→直接変更→戻り値不要
 
 #------------------------------------------------------------------------------
-  def DBGet(self,Hizuke,Seq,Rec):  # データ読込
+  def DBGet(self,Key,Rec):  # データ読込
 
-    DataRec = DatSoudan().GetRec(Hizuke,Seq)
+    DataRec = DatSoudan().GetRec(Key)
+
+    if DataRec.Hizuke != None:
+      Rec["TxtHizuke"]  = DataRec.Hizuke.strftime('%Y/%m/%d')
 
     if DataRec.Zikoku_S != None: # 開始時刻
       Rec["TxtZikoku_S"]  = DataRec.Zikoku_S.strftime('%H:%M')
@@ -156,7 +157,7 @@ class MainHandler(webapp2.RequestHandler):
     Rec["TxtZyusyo"]  = DataRec.Zyusyo
 
     if DataRec.BirthDay != None:
-      Rec["TxtBirthDay"]  = DataRec.BirthDay.strftime('%Y/%m/%d') 
+      Rec["TxtBirthDay"]  = common.GetWareki(DataRec.BirthDay) 
     
     Rec["TxtSoudanName"]  = DataRec.SoudanName # 相談者
     if  DataRec.Zokugara != None:
@@ -188,12 +189,12 @@ class MainHandler(webapp2.RequestHandler):
     Rec = DatSoudan()
     Hizuke = self.request.cookies.get('Hizuke', '') # Cookieより
     Rec.Hizuke  = datetime.datetime.strptime(Hizuke, '%Y/%m/%d') # 日付変換
-    Seq = self.request.cookies.get('Seq', '') # Cookieより
-    if Seq =="":
-      Rec.Seq     = Rec.GetLastSeq(Hizuke) + 1
-    else:
-      Rec.DelRec(Hizuke,Seq)
-      Rec.Seq     = int(Seq)
+
+    Key =  self.request.cookies.get('Key', '') # Cookieより
+
+    if Key !="":
+      Rec.DelRec(Key)
+      Rec.Seq = 0
 
     if self.request.get('TxtZikoku_S') != "": # 開始時刻
       Hizuke = self.request.get('TxtZikoku_S')
@@ -215,8 +216,9 @@ class MainHandler(webapp2.RequestHandler):
     Rec.Zyusyo       = self.request.get('TxtZyusyo')
 
     if self.request.get('TxtBirthDay') != "":  # 未入力時は無視ね
-      Hizuke = datetime.datetime.strptime(self.request.get('TxtBirthDay'), '%Y/%m/%d')
-      setattr(Rec,"BirthDay",Hizuke)
+      setattr(Rec,"BirthDay",common.WarekiHenkan(self,self.request.get("TxtBirthDay")))
+#      Hizuke = datetime.datetime.strptime(self.request.get('TxtBirthDay'), '%Y/%m/%d')
+#      setattr(Rec,"BirthDay",Hizuke)
 
     Rec.SoudanName       = self.request.get('TxtSoudanName')
     Rec.Zokugara         = int(self.request.get('OptZokugara'))

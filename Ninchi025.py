@@ -6,6 +6,8 @@ import webapp2
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 
+import common
+
 import datetime
 import time
 from calendar import monthrange
@@ -26,28 +28,25 @@ class MainHandler(webapp2.RequestHandler):
       self.redirect(users.create_logout_url(self.request.uri))
       return
     
-    Hizuke = self.request.get('Hizuke')   # パラメタ取得
-    Seq = self.request.get('Seq')   # パラメタ取得
+    Key = self.request.get('Key')   # パラメタ取得
 
-    WorkBook =  self.TableDataSet(Hizuke,Seq)
+    WorkBook =  self.TableDataSet(Key)
 
     self.response.headers['Content-Type'] = 'application/ms-excel'
     self.response.headers['Content-Transfer-Encoding'] = 'Binary'
     self.response.headers['Content-disposition'] = 'attachment; filename="Ninchi025.xls"'
     WorkBook.save(self.response.out)
 
-  def TableDataSet(self,Hizuke,Seq):
+  def TableDataSet(self,Key):
 
     Styles = self.SetStyles()
 
     WorkBook = xlwt.Workbook()  # 新規Excelブック
 
     WorkSheet = WorkBook.add_sheet(u'相談記録')  # ダミーシート
+    self.SetPrintParam(WorkSheet) # 用紙サイズ・余白設定
     WorkSheet.write_merge(1,1,1,7,u'呉認知症疾患医療センター　認知症初期集中支援チーム',Styles["Style002"])
     WorkSheet.write_merge(2,2,1,7,u'相談記録',Styles["Style001"])
-
-    WorkSheet.write(0,1,Hizuke)
-    WorkSheet.write(0,2,Seq)
 
     for Ctr in range(4,40):  # 行幅セット
       WorkSheet.row(Ctr).height_mismatch = 1
@@ -64,7 +63,7 @@ class MainHandler(webapp2.RequestHandler):
     WorkSheet.write_merge(5,6,1 ,1,u"対象者",Styles["Style002"])
     WorkSheet.write_merge(7,8,1 ,1,u"相談者",Styles["Style002"])
 
-    WorkSheet.write_merge(9,16,1 ,1,u"相談状況",Styles["Style002"])
+    WorkSheet.write_merge(9,16,1 ,1,u"相談経緯",Styles["Style002"])
     WorkSheet.write_merge(17,23,1 ,1,u"相談内容",Styles["Style002"])
     WorkSheet.write_merge(24,27,1 ,1,u"対応",Styles["Style002"])
 
@@ -74,8 +73,12 @@ class MainHandler(webapp2.RequestHandler):
     WorkSheet.write_merge(33,36,1,1,u"備考",Styles["Style002"])
 
     # ここからデータ
-    Rec = DatSoudan().GetRec(Hizuke,Seq)    # データ読み込み
-    Hizuke = datetime.datetime.strptime(Hizuke, '%Y/%m/%d')
+    Rec = DatSoudan().GetRec(Key)    # データ読み込み
+
+    WorkSheet.write(0,1,Rec.Hizuke.strftime('%Y/%m/%d'))
+    WorkSheet.write(0,2,str(Rec.Seq))
+
+    Hizuke = Rec.Hizuke
     OutStr = Hizuke.strftime('%Y') + u"年 "  # 日付変換
     OutStr += Hizuke.strftime('%m') + u"月 "  # 日付変換
     OutStr += Hizuke.strftime('%d') + u"日 "  # 日付変換
@@ -129,9 +132,7 @@ class MainHandler(webapp2.RequestHandler):
 
     WorkSheet.write_merge(6,6,5 ,5,u"生年月日",Styles["Style002"])
     if Rec.BirthDay != None:
-      OutStr =  Rec.BirthDay.strftime('%Y') + u"年 "  # 日付変換
-      OutStr += Rec.BirthDay.strftime('%m') + u"月 "  # 日付変換
-      OutStr += Rec.BirthDay.strftime('%d') + u"日 "  # 日付変換
+      OutStr =  common.GetWareki(Rec.BirthDay)
     else:
       OutStr = " " # 何か書かないと枠線引かないよ
     WorkSheet.write_merge(6,6,6 ,7,OutStr,Styles["Style002"])
@@ -189,7 +190,7 @@ class MainHandler(webapp2.RequestHandler):
       WorkSheet.write_merge(OutRow,OutRow,3 ,7,OutStr,Styles["Style003"])
 
     # 連絡先
-    WorkSheet.write_merge(31,31,2 ,2,u"郵便番号",Styles["Style002"])
+    WorkSheet.write_merge(31,31,2 ,2,u"氏名",Styles["Style002"])
     WorkSheet.write_merge(31,31,3 ,7,Rec.RenYubin,Styles["Style003"])
     WorkSheet.write_merge(32,32,2 ,2,u"住所",Styles["Style002"])
     WorkSheet.write_merge(32,32,3 ,5,Rec.RenZyusyo,Styles["Style003"])
@@ -280,6 +281,23 @@ class MainHandler(webapp2.RequestHandler):
     Style.alignment = Alignment
 
     return Style
+
+  def SetPrintParam(self,WorkSheet): # 用紙サイズ・余白設定
+#    WorkSheet.set_paper_size_code(13) # B5
+    WorkSheet.set_paper_size_code(9) # A4
+    WorkSheet.set_portrait(1) # 縦
+#    WorkSheet.set_portrait(2) # 横
+    WorkSheet.top_margin = 0.0 / 2.54    # 1インチは2.54cm
+    WorkSheet.bottom_margin = 0.5 / 2.54    # 1インチは2.54cm
+    WorkSheet.left_margin = 1.0 / 2.54    # 1インチは2.54cm
+    WorkSheet.right_margin = 0.5 / 2.54    # 1インチは2.54cm
+    WorkSheet.header_str = ''
+    WorkSheet.footer_str = ''
+    WorkSheet.fit_num_pages = 1
+#    WorkSheet.fit_height_to_pages = 0
+#    WorkSheet.fit_width_to_pages = 1
+#    WorkSheet.print_scaling = 100
+    return
 
 ################################################################################
 
