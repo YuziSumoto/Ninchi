@@ -83,7 +83,8 @@ class MainHandler(webapp2.RequestHandler):
 
     retStr = ""
 
-    Snap = DatSoudan().GetMonthList(Hizuke)
+#    Snap = DatSoudan().GetMonthList(Hizuke)
+    Snap = DatSoudan().GetAll()
 
 #    for Ctr in range(1,10):
     for Rec in Snap:

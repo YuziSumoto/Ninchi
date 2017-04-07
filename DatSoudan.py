@@ -38,6 +38,20 @@ class DatSoudan(db.Model):
   RenTel            = db.StringProperty(multiline=False)      # 電話番号
   Bikou             = db.StringProperty(multiline=True)       # 備考
 
+  def GetAll(self): # 全データ取得
+
+#    SHizuke = datetime.datetime.strptime(Hizuke, '%Y/%m/%d')
+#    SHizuke -= datetime.timedelta(days=31) #31日減算
+#    SHizuke = SHizuke.strftime('%Y/%m/%d')
+
+    Sql =  "SELECT * FROM DatSoudan"
+#    Sql += " Where Hizuke >= DATE('" + SHizuke.replace("/","-") + "')"
+#    Sql += "  And  Hizuke <= DATE('" + Hizuke.replace("/","-") + "')"
+    Sql += "    Order By Hizuke DESC,Seq DESC"
+    Snap = db.GqlQuery(Sql)
+    Rec  = Snap.fetch(Snap.count())
+    return Rec
+
   def GetMonthList(self,Hizuke): # 指定以前１ヶ月のデータ取得
 
     SHizuke = datetime.datetime.strptime(Hizuke, '%Y/%m/%d')
