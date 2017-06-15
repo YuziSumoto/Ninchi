@@ -5,17 +5,15 @@ class MstUser(db.Model):
   Name              = db.StringProperty(multiline=False)      # ユーザ名
 
   def ChkUser(self,Name):
-
-    Sql  =  "SELECT * FROM MstUser"
-    Query = db.GqlQuery(Sql)
-    Snap = Query.fetch(Query.count())
-
-    RetFlg = False
 
-    for Rec in Snap:
-      if Rec.Name == Name:
-        RetFlg = True
-        break
+
+    Sql  =   "SELECT * FROM MstUser"
+    Sql  +=  " Where Name = '" + Name + "'"
+    Query = db.GqlQuery(Sql)
+    if Query.count() == 0:
+      RetFlg = False
+    else:
+      RetFlg = True
 
     return RetFlg
 
