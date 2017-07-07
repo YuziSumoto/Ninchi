@@ -143,12 +143,20 @@ class MainHandler(webapp2.RequestHandler):
 
     if   Rec.Zokugara == 1:   # 続柄
       OutStr = u"本人"
-    elif Rec.Houhou == 2:
+    elif Rec.Zokugara == 2:
       OutStr = u"家族"
-    elif Rec.Houhou == 3:
+    elif Rec.Zokugara == 3:
       OutStr = u"友人"
-    elif Rec.Houhou == 4:
+    elif Rec.Zokugara == 4:
       OutStr = u"その他"
+    elif Rec.Zokugara == 6:
+      OutStr = u"病院"
+    elif Rec.Zokugara == 7:
+      OutStr = u"診療所"
+    elif Rec.Zokugara == 8:
+      OutStr = u"居宅"
+    elif Rec.Zokugara == 9:
+      OutStr = u"包括"
     else:
       OutStr = ""
     if Rec.ZokugaraBikou != "":
