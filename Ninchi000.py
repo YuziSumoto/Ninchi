@@ -20,9 +20,9 @@ class MainHandler(webapp2.RequestHandler):
 
   def get(self):
 
-    DynaUser =  MstUser()
-    DynaUser.Name = "gotou@kangosien.com"
-    DynaUser.put()
+#    DynaUser =  MstUser()
+#    DynaUser.Name = "gotou@kangosien.com"
+#    DynaUser.put()
 
     LblMsg = ""
 
