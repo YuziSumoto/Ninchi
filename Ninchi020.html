@@ -131,13 +131,16 @@
   </TR>
 
   <TR style="background-color:lightgray">
-    <TH>対応</TH>
+    <TH>対応<BR><BR>
+      <input type="text" id="TaiyoCtr" disabled="disabled"  style="width:40px" >/1000
+      <BR>最大1000バイトです。<BR><BR>
+    </TH>
     <TD align="left" colspan="4">
       <input type="checkbox" name="ChkTaiou1" {{ Rec.ChkTaiou1 }} >電話相談のみ
       <input type="checkbox" name="ChkTaiou2" {{ Rec.ChkTaiou2 }} >受診
       <input type="checkbox" name="ChkTaiou3" {{ Rec.ChkTaiou3 }} >入院
       <input type="checkbox" name="ChkTaiou4" {{ Rec.ChkTaiou4 }} >その他<BR>
-      <textarea name="TxtTaiou" cols=100 rows=14>{{Rec.TxtTaiou}}</textarea>
+      <textarea name="TxtTaiou" cols=100 rows=14  onkeyup="document.getElementById('TaiyoCtr').value=this.value.length*2" >{{Rec.TxtTaiou}}</textarea>
     </TD>
   </TR>
 
