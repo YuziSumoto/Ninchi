@@ -9,16 +9,16 @@ class DatSoudan(db.Model):
   Zikoku_S          = db.DateTimeProperty(auto_now_add=False) # 開始日時
   Zikoku_E          = db.DateTimeProperty(auto_now_add=False) # 終了日時
   Tanto             = db.StringProperty(multiline=False)      # 担当者
-  Houhou            = db.IntegerProperty()                    # 相談方法
+  Houhou            = db.IntegerProperty(default=1)           # 相談方法
   HouhouBikou       = db.StringProperty(multiline=False)      # 相談方法備考
-  Zyukyo            = db.IntegerProperty()                    # 住居状況
+  Zyukyo            = db.IntegerProperty(default=1)           # 住居状況
   ZyukyoBikou       = db.StringProperty(multiline=False)      # 住居状況備考
   Name              = db.StringProperty(multiline=False)      # 対象者名
-  Sex               = db.IntegerProperty()                    # 性別
+  Sex               = db.IntegerProperty(default=1)           # 性別
   Zyusyo            = db.StringProperty(multiline=False)      # 住所
   BirthDay          = db.DateTimeProperty(auto_now_add=False) # 生年月日
   SoudanName        = db.StringProperty(multiline=False)      # 相談者名
-  Zokugara          = db.IntegerProperty()                    # 続柄
+  Zokugara          = db.IntegerProperty(default=1)           # 続柄
   ZokugaraBikou     = db.StringProperty(multiline=False)      # 続柄備考
   Zyokyo            = db.StringProperty(multiline=True)       # 状況
   Naiyo             = db.StringProperty(multiline=True)       # 内容
