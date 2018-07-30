@@ -1,0 +1,107 @@
+<html>
+<head>
+  <style type="text/css">
+    .text  {font-size:XX-LARGE}
+    .button  {font-size:X-LARGE;WIDTH: 200px; HEIGHT:40px}
+		.scr {
+			overflow-y: scroll;   /* スクロール表示 */ 
+			width: 200px;
+			height: 200px;
+		}
+  </style>
+
+	<!-- カレンダー表示用 ↓-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/redmond/jquery-ui.css" >
+	<script>
+	  $(function() {
+	    $("#datepicker").datepicker();
+	  });
+	</script>
+	<!-- カレンダー表示用 ↑-->
+
+	<title>Ninchi030</title>
+</head>
+
+認知症初期集中支援チーム活動実績数
+<body>
+	<form name="Main" action="/Ninchi030/" method="post" style="font-size:X-LARGE">
+
+<table border="1">
+
+  <TR style="background-color:lightgray">
+    <TH rowspan="2">　月　</TH>
+    <TH colspan="4">新規相談人数</TH>
+    <TH colspan="2">総相談回数(延べ数)</TH>
+    <TH colspan="2">新規訪問人数</TH>
+    <TH colspan="2">訪問回数(延べ数)</TH>
+    <TH colspan="2">チーム員会議<BR>{{ Year }}年</TH>
+  </TR>
+
+  <TR style="background-color:lightgray">
+    <TH>{{ Year|add:"-1" }}年</TH>
+    <TH>{{ Year }}年</TH>
+    <TH>目標値</TH>
+    <TH>達成率</TH>
+    <TH>{{ Year|add:"-1" }}年</TH>
+    <TH>{{ Year }}年</TH>
+    <TH>{{ Year|add:"-1" }}年</TH>
+    <TH>{{ Year }}年</TH>
+    <TH>{{ Year|add:"-1" }}年</TH>
+    <TH>{{ Year }}年</TH>
+    <TH>開催回数</TH>
+    <TH>検討人数</TH>
+  </TR>
+
+	{% for Rec in Recs %} 
+		<TR align="center"
+			{% if Rec.Month == 99 %}
+ 				style="background-color:lightgray"
+ 			{% endif %}
+		>
+			<TH>
+			{% if Rec.Month == 99 %}
+				合計
+			{% else %}
+				<input type="button" style="WIDTH:50;"
+				value="{{Rec.Month}} 月"
+					 onclick="location.href='/Ninchi031/?Year={{Rec.Year}}&Month={{Rec.Month}}'">
+			{% endif %}
+			</TH>
+		    <TD>{{ Rec.LastSNinzu }}</TD>
+		    <TH>{{ Rec.SNinzu     }}</TH>
+		    <TD>{{ Rec.Mokuhyo    }}</TD>
+		    <TH style="background-color:lightgray">{{Rec.Tassei}}%</TH>
+		    <TD>{{ Rec.LastSKaisu }}</TD>
+		    <TH>{{ Rec.SKaisu     }}</TH>
+		    <TD>{{ Rec.LastHNinzu }}</TD>
+		    <TH>{{ Rec.HNinzu     }}</TH>
+		    <TD>{{ Rec.LastHKaisu }}</TD>
+		    <TH>{{ Rec.HKaisu     }}</TH>
+		    <TH>{{ Rec.KaigiKaisu }}</TH>
+		    <TH>{{ Rec.KaigiNinzu }}</TH>
+		</TR>
+	{% endfor %}
+</table>
+{{	LblMsg	}}
+<BR>
+	<input type="button" class="button"
+		value="前年" onclick="location.href='/Ninchi030/?Year={{ Year|add:"-1" }}'">
+	<input type="button" class="button"
+		value="翌年" onclick="location.href='/Ninchi030/?Year={{ Year|add:"1" }}'">
+
+	<input type="button" class="button"
+		value="終了" onclick="location.href='/Ninchi000/'">
+　　
+<!--
+<input type="submit" value = "決定" name="BtnKettei" class="button"><BR>
+-->
+
+</form>
+
+</body>
+
+</html>
+

@@ -1,0 +1,82 @@
+<html>
+<head>
+  <style type="text/css">
+    .text  {font-size:XX-LARGE}
+    .button  {font-size:X-LARGE;WIDTH: 200px; HEIGHT:40px}
+		.scr {
+			overflow-y: scroll;   /* スクロール表示 */ 
+			width: 200px;
+			height: 200px;}
+		TH	{width:100px;background-color:lightgray}
+		}
+  </style>
+
+	<!-- カレンダー表示用 ↓-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/redmond/jquery-ui.css" >
+	<script>
+	  $(function() {
+	    $("#datepicker").datepicker();
+	  });
+	</script>
+	<!-- カレンダー表示用 ↑-->
+
+	<title>Ninchi041</title>
+</head>
+<body>
+	<form name="Main" action="/Ninchi041/" method="post" style="font-size:X-LARGE">
+
+認知症初期集中支援チーム活動報告
+
+<table border="1">
+
+  <TR>
+    <TH>日付</TH>
+		<TD>
+			<input style="width:150px" type="date"
+				value="{{ Rec.Hizuke|date:"Y-m-d" }}" name="Hizuke"	/>
+		</TD>
+  </TR>
+  <TR>
+    <TH>実施</TH>
+		<TD>
+			<input	type="checkbox" name="Zissi"	value="True"
+			{% if Rec.Zissi %}
+				checked
+			{% endif %}
+			/>
+		</TD>
+  </TR>
+  <TR>
+    <TH>開催場所</TH>
+		<TD>
+			<input	style="width:300px" type="text"
+				value="{{ Rec.Basyo     }}" name="Basyo"	/>
+		</TD>
+  </TR>
+  <TR>
+    <TH>参加人数</TH>
+		<TD>
+			<input style="width:50px" type="number"
+				value="{{ Rec.Ninzu     }}" name="Ninzu"	/>
+		</TD>
+  </TR>
+
+</table>
+{{	LblMsg	}}
+<BR>
+	<input type="button" class="button"
+		value="中止" onclick="location.href='/Ninchi040/'">
+　　
+<input type="submit" value = "削除" name="BtnDel" class="button">
+　　
+<input type="submit" value = "決定" name="BtnKettei" class="button"><BR>
+
+</form>
+
+</body>
+
+</html>
+

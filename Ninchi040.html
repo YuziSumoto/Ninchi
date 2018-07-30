@@ -1,0 +1,91 @@
+<html>
+<head>
+  <style type="text/css">
+    .text  {font-size:XX-LARGE}
+    .button  {font-size:X-LARGE;WIDTH: 200px; HEIGHT:40px}
+	.scr {
+		overflow-y: scroll;   /* スクロール表示 */ 
+		width:830px;
+		height:400px;
+	}
+  </style>
+
+	<!-- カレンダー表示用 ↓-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/redmond/jquery-ui.css" >
+	<script>
+	  $(function() {
+	    $("#datepicker").datepicker();
+	  });
+	</script>
+	<!-- カレンダー表示用 ↑-->
+
+	<title>Ninchi040</title>
+</head>
+<body>
+	<form name="Main" action="/Ninchi030/" method="post" style="font-size:X-LARGE">
+
+認知症疾患医療センター活動報告(講師派遣予定・実績)
+
+<table border="1" width="800px">
+  <TR style="background-color:lightgray">
+    <TH width="10%">番号</TH>
+    <TH width="20%">日付</TH>
+    <TH width="10%">実施</TH>
+    <TH width="50%">開催場所</TH>
+    <TH width="10%">参加人数</TH>
+  </TR>
+</table>
+<DIV class="scr">
+	<TABLE border="1" width="800px">
+		<TR>
+			<TH style="height=0;width:10%"></TH>
+			<TH style="height=0;width:20%"></TH>
+			<TH style="height=0;width:10%"></TH>
+			<TH style="height=0;width:50%"></TH>
+			<TH style="height=0;width:10%"></TH>
+		</TR>
+		{% for Rec in Recs %} 
+			<TR>
+				<TD>
+					<input type="button" class="button" style="WIDTH:74px"
+						value="{{ Rec.No }}" onclick="location.href='/Ninchi041/?Key={{ Rec.key }}'">
+				</TD>
+				<TD>{{ Rec.Hizuke|date:"Y/m/d" }}</TD>
+				<TD>
+						{% if Rec.Zissi %}
+							済
+						{% else %}
+							予定	
+						{% endif %}
+				</TD>
+				<TD>{{ Rec.Basyo }}</TD>
+				<TD>{{ Rec.Ninzu }}名</TD>
+			</TR>
+		{% endfor %}
+	</TABLE>
+</DIV>
+
+{{	LblMsg	}}
+
+<BR>
+<BR>
+
+	<input type="button" class="button"
+		value="追加" onclick="location.href='/Ninchi041/'">
+　　
+	<input type="button" class="button"
+		value="終了" onclick="location.href='/Ninchi000/'">
+
+<!--
+<input type="submit" value = "決定" name="BtnKettei" class="button"><BR>
+-->
+
+</form>
+
+</body>
+
+</html>
+

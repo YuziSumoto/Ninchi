@@ -27,6 +27,20 @@ handlers:
 - url: /Ninchi025/.*
   script: Ninchi025.app
 
+# 活動実績数
+- url: /Ninchi030/.*
+  script: Ninchi030.app
+# 活動実績数入力
+- url: /Ninchi031/.*
+  script: Ninchi031.app
+
+# 活動報告
+- url: /Ninchi040/.*
+  script: Ninchi040.app
+# 活動報告入力
+- url: /Ninchi041/.*
+  script: Ninchi041.app
+
 # 初画面(日付指定画面)
 - url: .*
   script: Ninchi000.app

@@ -1,0 +1,102 @@
+<html>
+<head>
+  <style type="text/css">
+    .text  {font-size:XX-LARGE}
+    .button  {font-size:X-LARGE;WIDTH: 200px; HEIGHT:40px}
+		.scr {
+			overflow-y: scroll;   /* スクロール表示 */ 
+			width: 200px;
+			height: 200px;
+		}
+  </style>
+
+	<!-- カレンダー表示用 ↓-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/redmond/jquery-ui.css" >
+	<script>
+	  $(function() {
+	    $("#datepicker").datepicker();
+	  });
+	</script>
+	<!-- カレンダー表示用 ↑-->
+
+	<title>Ninchi031</title>
+</head>
+<body>
+	<form name="Main" action="/Ninchi031/" method="post" style="font-size:X-LARGE">
+
+認知症初期集中支援チーム活動実績数　　　　　{{ Year }}年　{{ Month }}月
+
+<table border="1">
+
+  <TR style="background-color:lightgray">
+    <TH colspan="3">新規相談人数</TH>
+    <TH rowspan="2">総相談回数(延べ数)</TH>
+    <TH rowspan="2">新規訪問人数</TH>
+    <TH rowspan="2">訪問回数(延べ数)</TH>
+    <TH colspan="2">チーム員会議</TH>
+  </TR>
+
+  <TR style="background-color:lightgray">
+    <TH>人数</TH>
+    <TH>目標値</TH>
+    <TH>達成率</TH>
+    <TH>開催回数</TH>
+    <TH>検討人数</TH>
+	</TR>
+	<TR align="center">
+		<TD>
+			<input style="width:80px" type="number"
+				value="{{ Rec.SNinzu     }}" name="SNinzu"/ >
+		</TD>
+		<TD>
+			<input style="width:80px" type="number"
+				value="{{ Rec.Mokuhyo    }}" name="Mokuhyo"/>
+		</TD>
+		<TH style="background-color:lightgray">
+			{{Rec.Tassei}}%
+		</TH>
+		<TD>
+			<input style="width:80px" type="number"
+				value="{{ Rec.SKaisu     }}" name="SKaisu"	/>
+		</TD>
+		<TD>
+			<input style="width:80px" type="number"
+				value="{{ Rec.HNinzu     }}" name="HNinzu" />
+		</TD>
+		<TD>
+			<input style="width:80px" type="number"
+				value="{{ Rec.HKaisu     }}" name="HKaisu"	/>
+		</TD>
+		<TD>
+			<input style="width:80px" type="number"
+				value="{{ Rec.KaigiKaisu }}" name="KaigiKaisu"/>
+		</TD>
+		<TD>
+			<input style="width:80px" type="number"
+				value="{{ Rec.KaigiNinzu }}" name="KaigiNinzu" />
+		</TD>
+	</TR>
+</table>
+{{	LblMsg	}}
+<BR>
+	<input type="button" class="button" value="中止"
+		{% if Month < "4" %}
+  		 onclick="location.href='/Ninchi030/?Year={{ Year|add:"-1" }}'">
+		{% else %}
+  		 onclick="location.href='/Ninchi030/?Year={{ Year }}'">
+		{% endif %}
+<input type="submit" value = "決定" name="BtnKettei" class="button"><BR>
+
+<!--
+<input type="submit" value = "決定" name="BtnKettei" class="button"><BR>
+-->
+
+</form>
+
+</body>
+
+</html>
+
