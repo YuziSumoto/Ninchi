@@ -8,7 +8,7 @@
 			overflow-y: scroll;   /* スクロール表示 */ 
 			width: 620px;
 			height: 400px;
-			border: 4px double #000000; 
+			border: 1px double #000000; 
 		}
   </style>
 	<title>相談一覧(Pana010)</title>
@@ -17,24 +17,24 @@
 <body>
 	<form name="Main" action="/Ninchi010/" method="post" style="font-size:X-LARGE">
 	
-	  相談一覧 ({{Rec.TxtHizuke }} )
+	  相談一覧 ({{	Hizuke	 }} )
 	
-	    <table border="1">
+	    <table border="1" width="600px">
 
 				<TR style="background-color:LightGray">
-					<TH Width="84px">
+					<TH Width="15%">
 					  更新
           </TH>
-					<TH Width="84px">
+					<TH Width="15%">
 					  日付
           </TH>
-					<TH Width="300px">
+					<TH Width="50%">
 					  対象者名
           </TH>
-					<TH Width="50px">
+					<TH Width="10%">
 					  印刷
           </TH>
-					<TH Width="50px">
+					<TH Width="10%">
 					  削除
           </TH>
 				</TR>
@@ -42,19 +42,40 @@
 			</table>
 
 		<DIV class="scr">
-	    <table border="1">
+	    <table border="1" width="600px">
 				<TR> <!-- # 枠幅設定用行なので高さは０ -->
-					<TH Height="0" Width="80px" style="border-style:none">
+					<TH Height="0" Width="15%" style="border-style:none">
           </TH>
-					<TH Height="0" Width="80px" style="border-style:none">
+					<TH Height="0" Width="15%" style="border-style:none">
           </TH>
-					<TH Height="0" Width="300px" style="border-style:none">
+					<TH Height="0" Width="50%" style="border-style:none">
           </TH>
-					<TH Height="0" Width="50px" style="border-style:none">
+					<TH Height="0" Width="10%" style="border-style:none">
           </TH>
-					<TH Height="0" Width="50px" style="border-style:none">
+					<TH Height="0" Width="10%" style="border-style:none">
           </TH>
 				</TR>
+
+			{% for Rec in Recs %} 
+				<TR align="center">
+					<TD>	<!--    # 更新ボタン（患者コード)	-->
+						<input type='submit' value = '更新' style='width:80px'
+							 name='BtnSelect{{ Rec.key }}'
+						>
+					</TD>
+					<TD>	{{	Rec.Hizuke|date:"Y/m/d"	}}	</TD><!--    # 患者名 -->
+
+					<TD>	{{	Rec.Name 	}}	</TD>			<!--    # 患者名 -->
+
+					<TD><input type='button' value = '印刷' style='width:50px'
+							onclick='window.open("/Ninchi025/?Key={{ Rec.key }}");'>
+					</TD>	<!--		 # 印刷ボタン（患者コード)	-->
+					<TD><!--    # 削除ボタン（患者コード)	-->
+						<input type='submit' value = '削除'	style='width:50px'
+							name='BtnDel{{Rec.key}}'>
+					</TD>
+      	</TR>
+			{% endfor %}
 
 				{{ StrTable|safe }}
 			</table>
