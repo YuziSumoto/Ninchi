@@ -31,7 +31,9 @@ class MainHandler(webapp2.RequestHandler):
     if self.request.get('Year') != "": # パラメタ無し？
       Year = int(self.request.get('Year'))   # パラメタ取得
     else:
-      Year = 2018
+      Year = datetime.datetime.today().year
+      if datetime.datetime.today().month < 4:
+        Year -= 1
 
     Month = 4
 
