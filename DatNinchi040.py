@@ -18,6 +18,17 @@ class DatNinchi040(db.Model):
 
     return Recs
 
+  def GetYear(self,iYear): # 指定年のデータ取得
+
+    Sql =  "SELECT * FROM DatNinchi040"
+    Sql += "  Where Hizuke >= Date('" + str(iYear) + "-04-01')"
+    Sql += "   And  Hizuke <= Date('" + str(iYear + 1) + "-03-31')"
+    Sql += " Order By Hizuke,Basyo"
+    Snap = db.GqlQuery(Sql)
+    Recs  = Snap.fetch(Snap.count())
+
+    return Recs
+
   def GetRec(self,Key): # 指定キーのデータ取得
 
     if Key == "":

@@ -28,7 +28,15 @@ class MainHandler(webapp2.RequestHandler):
       self.redirect(users.create_logout_url(self.request.uri))
       return
 
-    Recs = DatNinchi040().GetAll()   
+    if self.request.get('Year') != "": # パラメタあり？
+      Year = int(self.request.get('Year'))   # パラメタ取得
+    else:
+      Year = datetime.datetime.today().year
+      if datetime.datetime.today().month < 4:
+        Year -= 1
+
+#    Recs = DatNinchi040().GetAll()   
+    Recs = DatNinchi040().GetYear(Year)   
 
     No = 1
     for Rec in Recs:
@@ -38,6 +46,7 @@ class MainHandler(webapp2.RequestHandler):
     LblMsg = ""
 
     template_values = {
+      'Year'   :Year,
       'Recs'     :Recs,
       'LblMsg': LblMsg
       }
